@@ -7,8 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<label>Are you sure?</label>
-<a href="rechargeNow">Yes</a>
-<a href="">No</a>
+<h1> Oops insufficient balance</h1>
 </body>
 </html>

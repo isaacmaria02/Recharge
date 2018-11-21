@@ -36,13 +36,17 @@ public class RechargeDAO implements RechargeDAOInterface
 	}
 	
 	public List<RechargeForm> getAllTransaction(RechargeForm rf){  
-		 String sql="select * from Transactions"; 
+		 String sql="select * from Transactions where mobile=?"; 
 		 
 		 return jdbcTemplate.query(sql, new Object[] {rf.getMobileNo()}, new RowMapper<RechargeForm>(){  
 			    public RechargeForm mapRow(ResultSet rs, int rownumber) throws SQLException {  
 			        RechargeForm e=new RechargeForm();  
-			       // e.setMobileNo(rs.getInt(2)); 
-                     e.setAmount(rs.getInt(2));
+			      //  e.setMobileNo(rs.getInt(2)); 
+			        e.setMobileNo(rs.getLong(2));
+                     e.setAmount(rs.getInt(3));
+                     e.setOperator(rs.getString(4));
+                     
+                    
 			        System.out.println(e.getAmount());
 			        return e;  
 			    }  
@@ -51,16 +55,18 @@ public class RechargeDAO implements RechargeDAOInterface
 	 }  
 	
 	public User checkBalance(RechargeForm rf){  
-		 String sql="select * from Transactions"; 
+		System.out.println("inside dao"+rf.getUserId());
+		 String sql="select * from users where users_pk="+rf.getUserId(); 
 		 
-		 return (User)jdbcTemplate.queryForObject(sql, new Object[] {rf.getUserId()},new BeanPropertyRowMapper(User.class) ); 	 
+		 return (User)jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper(User.class) ); 	 
 		 
 	 }
-	/*
-	public int updateBalance(RechargeForm rf){  
-	    String sql="update Data set lname='"+p.getLname()+"' where fname="+p.getFname()+"";  
+	
+	public int updateBalance(int balance, RechargeForm rf){  
+		System.out.println("inside update balance "+balance +" "+rf.getUserId());
+	    String sql="update Users set balance='"+balance+"' where users_pk="+rf.getUserId()+"";  
 	    return jdbcTemplate.update(sql);  
-	}  */
+	}  
 	
 
 }  

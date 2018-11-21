@@ -3,11 +3,25 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.maven</groupId>
   <artifactId>springJDBC</artifactId>
-  <packaging>war</packaging>
+  <packaging>ear</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <name>springJDBC Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+  <!-- https://mvnrepository.com/artifact/jstl/jstl -->
+<dependency>
+    <groupId>jstl</groupId>
+    <artifactId>jstl</artifactId>
+    <version>1.2</version>
+</dependency>
+  <!-- https://mvnrepository.com/artifact/taglibs/standard -->
+<dependency>
+    <groupId>taglibs</groupId>
+    <artifactId>standard</artifactId>
+    <version>1.1.2</version>
+</dependency>
+  
+  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

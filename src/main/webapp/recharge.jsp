@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="rechargeNow">
+<form action="checkBal">
 <label>User ID</label><input type="text" name="userId"><br>
 <label>Mobile Number</label><input type="text" name="mobileNo"><br>
 <label>Amount</label><input type="number" min="10" name="amount"><br>

@@ -9,6 +9,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.recharge.dao.RechargeDAO;
 import com.recharge.model.RechargeForm;
+import com.recharge.model.User;
 
 @Controller
 public class RechargeController
@@ -39,44 +41,71 @@ public class RechargeController
 	}*/
 	
 	
-	@RequestMapping("/checkBal")
-	
+	@RequestMapping("/checkBal")	
 	public ModelAndView Check(HttpServletRequest request,HttpServletResponse response, @ModelAttribute RechargeForm rf) throws ServerException,IOException
 	{
 
-		
-	
-		int i = edao.checkBalance(rf);
-		
-		if(i>0)
+	//	RechargeForm r  = rf;
+	System.out.println("inside check "+rf.getAmount()+" "+rf.getUserId());
+		User u= edao.checkBalance(rf);
+		//System.out.println("checked bal"+u.getBalance()+" "+rf.getAmount());
+		if(u.getBalance()>rf.getAmount())
 		{
-			System.out.println("save");
+			HttpSession ses = request.getSession();
+			ses.setAttribute("obj",rf);
+			ses.setAttribute("user", u);
+			
+			return new ModelAndView("confirm");
+
+			
+			
+
+			//System.out.println("save");
 		}
 		else
 		{
-			System.out.println("not save..");
+			return new ModelAndView("error");
+
 		}
-		return new ModelAndView("display");
 	}
 	
 	
 	@RequestMapping("/rechargeNow")
-	public ModelAndView Save(HttpServletRequest request,HttpServletResponse response, @ModelAttribute RechargeForm rf) throws ServerException,IOException
+	public ModelAndView Save(HttpServletRequest request,HttpServletResponse response )throws ServerException,IOException
 	{
 		System.out.println("test2....");
+		
+		HttpSession ses = request.getSession();
+		RechargeForm rf = (RechargeForm)ses.getAttribute("obj");
+		User u = (User) ses.getAttribute("user");
+		
+		
+		int j = edao.updateBalance(u.getBalance()-rf.getAmount(), rf);
+		
+		System.out.println("got user session"+u.getBalance());
+		if(j>0)
+		{
+			
+		
+		}
+		else
+		{
+			return new ModelAndView("recharge");
+		}
+		
 		
 		
 		int i = edao.saveTransaction(rf);
 		
 		if(i>0)
 		{
-			System.out.println("save");
+			return new ModelAndView("sucess");
 		}
 		else
 		{
 			System.out.println("not save..");
 		}
-		return new ModelAndView("display");
+		return new ModelAndView("index");
 	}
 	
 	@RequestMapping("/display")
@@ -86,8 +115,13 @@ public class RechargeController
 		List<RechargeForm> lst = new ArrayList<RechargeForm>();
 		lst = edao.getAllTransaction(rf);
 		request.setAttribute("transactionList",lst);
-	
-		return new ModelAndView("displayAll");
+		/*HttpSession session = request.getSession();
+		session.setAttribute("transactionList",lst);*/
+
+		HttpSession ses = request.getSession();
+		ses.setAttribute("transactionList", lst);	
+		
+		return new ModelAndView("display");
 	}
 	
 	/*

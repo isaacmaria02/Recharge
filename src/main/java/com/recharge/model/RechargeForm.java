@@ -2,9 +2,10 @@ package com.recharge.model;
 
 public class RechargeForm {
 	private int userId;
-	private long mobileNo;
-	private String operator;
+	private long  mobileNo;
 	private int amount;
+	private String operator;
+	
 	
 	
 	public int getUserId() {
@@ -14,6 +15,8 @@ public class RechargeForm {
 		this.userId = userId;
 	}
 
+	
+	
 	public long getMobileNo() {
 		return mobileNo;
 	}
